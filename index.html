@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>فرص خضراء — تحليل الفرص بالذكاء الاصطناعي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+:root{--color-green:#1F6D45;--color-green-dark:#154E31;--color-cream:#FAF7EF;--color-cream-deep:#F1EBDA;--color-gold:#B8902E;--color-gold-bg:#FBF1DC;--color-ink:#1E2A22;--color-muted:#6B7568;--color-line:#DCE3D8;--color-white:#FFFFFF;--radius-lg:18px;--radius-md:12px;--radius-sm:8px;--shadow-soft:0 10px 30px rgba(31,109,69,0.08);}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'IBM Plex Sans Arabic',sans-serif;background:var(--color-cream);color:var(--color-ink);-webkit-font-smoothing:antialiased;}
+.page{min-height:100vh;background-image:radial-gradient(circle at 8% 8%,rgba(31,109,69,0.05) 0%,transparent 40%),radial-gradient(circle at 92% 18%,rgba(184,144,46,0.06) 0%,transparent 35%);display:flex;flex-direction:column;align-items:center;padding:32px 16px 60px;}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+.brand-mark{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--color-green) 0%,var(--color-green-dark) 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--shadow-soft);}
+.brand-mark svg{width:22px;height:22px;}
+.brand-name{font-family:'Cairo',sans-serif;font-weight:800;font-size:22px;color:var(--color-green-dark);letter-spacing:-0.3px;}
+header.hero{text-align:center;max-width:600px;margin-bottom:28px;}
+header.hero h1{font-family:'Cairo',sans-serif;font-weight:800;font-size:clamp(24px,4.5vw,34px);line-height:1.35;margin:14px 0 10px;color:var(--color-ink);}
+header.hero h1 span{color:var(--color-green);}
+header.hero p{font-size:15px;color:var(--color-muted);line-height:1.8;margin:0;}
+main{width:100%;max-width:640px;}
+.card{background:var(--color-white);border:1px solid var(--color-line);border-radius:var(--radius-lg);padding:26px;box-shadow:var(--shadow-soft);}
+.card + .card{margin-top:20px;}
+label.field-label{display:flex;align-items:center;gap:8px;font-family:'Cairo',sans-serif;font-weight:700;font-size:15px;color:var(--color-green-dark);margin-bottom:10px;}
+label.field-label .dot{width:6px;height:6px;border-radius:50%;background:var(--color-gold);flex-shrink:0;}
+textarea{width:100%;min-height:180px;resize:vertical;padding:14px 16px;border:1.5px solid var(--color-line);border-radius:var(--radius-md);font-family:'IBM Plex Sans Arabic',sans-serif;font-size:15px;line-height:1.8;color:var(--color-ink);background:var(--color-cream);transition:border-color 0.15s ease,box-shadow 0.15s ease;}
+textarea:focus{outline:none;border-color:var(--color-green);box-shadow:0 0 0 3px rgba(31,109,69,0.12);background:var(--color-white);}
+textarea::placeholder{color:var(--color-muted);opacity:0.8;}
+.field-hint{font-size:13px;color:var(--color-muted);margin-top:8px;}
+.char-count{font-size:12px;color:var(--color-muted);margin-top:4px;text-align:left;}
+.btn-primary{width:100%;margin-top:18px;padding:15px 20px;border:none;border-radius:var(--radius-md);background:linear-gradient(135deg,var(--color-green) 0%,var(--color-green-dark) 100%);color:var(--color-white);font-family:'Cairo',sans-serif;font-weight:700;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform 0.12s ease,box-shadow 0.12s ease,opacity 0.12s ease;box-shadow:0 6px 16px rgba(31,109,69,0.22);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(31,109,69,0.28);}
+.btn-primary:active{transform:translateY(0);}
+.btn-primary:disabled{opacity:0.65;cursor:not-allowed;transform:none;}
+.btn-primary svg{width:19px;height:19px;flex-shrink:0;}
+.spinner{width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,0.35);border-top-color:var(--color-white);animation:spin 0.7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.error-box{display:none;margin-top:16px;padding:14px 16px;border-radius:var(--radius-md);background:#FBEAEA;border:1px solid #E8B4B4;color:#9B3434;font-size:14px;line-height:1.7;align-items:flex-start;gap:10px;}
+.error-box.show{display:flex;}
+.error-box svg{width:18px;height:18px;flex-shrink:0;margin-top:2px;}
+.result-card{display:none;margin-top:20px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--color-line);box-shadow:var(--shadow-soft);animation:rise 0.35s ease;}
+.result-card.show{display:block;}
+@keyframes rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  .result-header{background:linear-gradient(135deg,var(--color-green) 0%,var(--color-green-dark) 100%);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.result-header .title{display:flex;align-items:center;gap:10px;color:var(--color-white);font-family:'Cairo',sans-serif;font-weight:700;font-size:16px;}
+.result-header svg{width:19px;height:19px;flex-shrink:0;}
+.copy-btn{background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.3);color:var(--color-white);font-family:'IBM Plex Sans Arabic',sans-serif;font-size:13px;padding:7px 14px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background 0.15s ease;flex-shrink:0;white-space:nowrap;}
+.copy-btn:hover{background:rgba(255,255,255,0.26);}
+.copy-btn svg{width:14px;height:14px;}
+.result-body{background:var(--color-white);padding:22px;}
+.result-section{margin-bottom:20px;}
+.result-section:last-child{margin-bottom:0;}
+.result-section-label{font-family:'Cairo',sans-serif;font-weight:700;font-size:13px;color:var(--color-gold);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.result-summary{font-size:15px;line-height:1.9;color:var(--color-ink);}
+.category-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:var(--color-cream-deep);color:var(--color-green-dark);border-radius:999px;font-family:'Cairo',sans-serif;font-weight:700;font-size:14px;border:1.5px solid var(--color-line);}
+.tags-list{display:flex;flex-wrap:wrap;gap:8px;}
+.tag{display:inline-block;padding:5px 14px;background-color:var(--color-gold-bg);color:var(--color-gold);border-radius:999px;font-size:13px;font-weight:500;border:1px solid #E8C97A;}
+hr.divider{border:none;border-top:1px solid var(--color-line);margin:0 0 20px;}
+footer{margin-top:36px;text-align:center;font-size:12.5px;color:var(--color-muted);line-height:1.8;}
+footer strong{color:var(--color-green-dark);}
+@media (prefers-reduced-motion: reduce){*{animation-duration:0.01ms !important;transition-duration:0.01ms !important;}}
+button:focus-visible,textarea:focus-visible{outline:3px solid var(--color-gold);outline-offset:2px;}
+@media (max-width: 480px){.card{padding:20px;border-radius:var(--radius-md);}.result-header{padding:16px 18px;}.result-body{padding:18px;}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="brand">
+    <div class="brand-mark">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 21C12 21 5 16.5 5 10.5C5 7 7.5 4 11 4C11.5 4 12 4.5 12 5.5V21Z" fill="#FAF7EF"/>
+        <path d="M12 21C12 21 19 16.5 19 10.5C19 7 16.5 4 13 4C12.5 4 12 4.5 12 5.5V21Z" fill="#FAF7EF" fill-opacity="0.55"/>
+      </svg>
+    </div>
+    <span class="brand-name">فرص خضراء</span>
+  </div>
+  <header class="hero">
+    <h1>حلّلي وصف <span>الفرصة</span> بثوانٍ</h1>
+    <p>الصقي نص فرصة أو منحة، ودع الذكاء الاصطناعي يلخصها ويصنفها ويستخرج وسومها لكِ</p>
+  </header>
+  <main>
+    <section class="card">
+      <label class="field-label" for="opportunity-input">
+        <span class="dot"></span>
+        نص الفرصة أو المنحة
+      </label>
+      <textarea id="opportunity-input" placeholder="الصق هنا نص إعلان الفرصة أو المنحة كاملاً — كلما كان النص أطول وأكثر تفصيلاً كان التحليل أدق…" maxlength="6000"></textarea>
+      <div class="char-count"><span id="char-count">0</span> / 6000 حرف</div>
+      <div class="field-hint">مثال: إعلان منحة دراسية، وصف وظيفة، برنامج تدريبي، مساقة…</div>
+      <button class="btn-primary" id="analyze-btn" type="button">
+        <svg id="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3L13.5 8.5L19 10L13.5 11.5L12 17L10.5 11.5L5 10L10.5 8.5L12 3Z" fill="white"/>
+          <path d="M19 14L19.7 16.3L22 17L19.7 17.7L19 20L18.3 17.7L16 17L18.3 16.3L19 14Z" fill="white"/>
+        </svg>
+        <span id="btn-text">تحليل الفرصة بالذكاء الاصطناعي</span>
+      </button>
+      <div class="error-box" id="error-box">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 9V13M12 17H12.01M10.29 3.86L1.82 18A2 2 0 0 0 3.54 21H20.46A2 2 0 0 0 22.18 18L13.71 3.86A2 2 0 0 0 10.29 3.86Z" stroke="#9B3434" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span id="error-message">تعذّر الاتصال بالخادم. تأكدي من اتصالك بالإنترنت وحاولي مرة أخرى.</span>
+      </div>
+    </section>
+    <div class="result-card" id="result-card">
+      <div class="result-header">
+        <div class="title">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 12L11 14L15 10M21 12C21 16.97 17 21 12 21C7 21 3 16.97 3 12C3 7.03 7 3 12 3C17 3 21 7.03 21 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          نتيجة التحليل
+        </div>
+        <button class="copy-btn" id="copy-btn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="9" y="9" width="11" height="11" rx="2" stroke="white" stroke-width="2"/>
+            <path d="M5 15V5C5 3.9 5.9 3 7 3H15" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span id="copy-btn-text">نسخ النتيجة</span>
+        </button>
+      </div>
+      <div class="result-body">
+        <div class="result-section">
+          <div class="result-section-label">التصنيف</div>
+          <span class="category-badge" id="result-category">—</span>
+        </div>
+        <hr class="divider" />
+        <div class="result-section">
+          <div class="result-section-label">الملخص</div>
+          <p class="result-summary" id="result-summary">—</p>
+        </div>
+        <hr class="divider" />
+        <div class="result-section">
+          <div class="result-section-label">الوسوم</div>
+          <div class="tags-list" id="result-tags"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <strong>فرص خضراء (Foras Khadra)</strong> — مشروع تدريبي لمسابقة تقييم منح © 2026
+  </footer>
+</div>
+  <script>
+  const textarea = document.getElementById('opportunity-input');
+  const charCount = document.getElementById('char-count');
+  const analyzeBtn = document.getElementById('analyze-btn');
+  const btnIcon = document.getElementById('btn-icon');
+  const btnText = document.getElementById('btn-text');
+  const errorBox = document.getElementById('error-box');
+  const errorMessage = document.getElementById('error-message');
+  const resultCard = document.getElementById('result-card');
+  const resultCategory = document.getElementById('result-category');
+  const resultSummary = document.getElementById('result-summary');
+  const resultTags = document.getElementById('result-tags');
+  const copyBtn = document.getElementById('copy-btn');
+  const copyBtnText = document.getElementById('copy-btn-text');
+
+  textarea.addEventListener('input', () => {
+    charCount.textContent = textarea.value.length;
+  });
+
+  function hideMessages() {
+    errorBox.classList.remove('show');
+    resultCard.classList.remove('show');
+  }
+
+  function setLoading(isLoading) {
+    analyzeBtn.disabled = isLoading;
+    if (isLoading) {
+      btnIcon.outerHTML = '<span class="spinner" id="btn-icon"></span>';
+      btnText.textContent = 'جارٍ التحليل…';
+    } else {
+      btnText.textContent = 'تحليل الفرصة بالذكاء الاصطناعي';
+    }
+  }
+
+  async function analyzeOpportunity() {
+    const text = textarea.value.trim();
+    hideMessages();
+    if (!text) {
+      errorMessage.textContent = 'يرجى لصق نص الفرصة أولاً قبل التحليل.';
+      errorBox.classList.add('show');
+      textarea.focus();
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await fetch('/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: text })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'حدث خطأ أثناء معالجة الطلب.');
+      }
+      renderResult(data);
+    } catch (err) {
+      errorMessage.textContent = err.message || 'تعذّر الاتصال بالخادم. تأكدي من اتصالك بالإنترنت وحاولي مرة أخرى.';
+      errorBox.classList.add('show');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function renderResult(data) {
+    resultSummary.textContent = data.summary || 'لم يتم استخراج ملخص.';
+    resultCategory.textContent = data.category || 'غير محدد';
+    resultTags.innerHTML = '';
+    const tags = Array.isArray(data.tags) ? data.tags : [];
+    if (tags.length === 0) {
+      resultTags.innerHTML = '<span class="tag">بلا وسوم</span>';
+    } else {
+      tags.forEach((tag) => {
+        const span = document.createElement('span');
+        span.className = 'tag';
+        span.textContent = tag;
+        resultTags.appendChild(span);
+      });
+    }
+    resultCard.classList.add('show');
+    resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  copyBtn.addEventListener('click', async () => {
+    const tags = Array.from(resultTags.querySelectorAll('.tag')).map((t) => t.textContent);
+    const text = [
+      'التصنيف: ' + resultCategory.textContent,
+      'الملخص: ' + resultSummary.textContent,
+      'الوسوم: ' + tags.join('، ')
+    ].join('\n');
+    try {
+      await navigator.clipboard.writeText(text);
+      copyBtnText.textContent = 'تم النسخ ✓';
+      setTimeout(() => { copyBtnText.textContent = 'نسخ النتيجة'; }, 2000);
+    } catch (err) {
+      copyBtnText.textContent = 'تعذّر النسخ';
+      setTimeout(() => { copyBtnText.textContent = 'نسخ النتيجة'; }, 2000);
+    }
+  });
+
+  analyzeBtn.addEventListener('click', analyzeOpportunity);
+
+  textarea.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      analyzeOpportunity();
+    }
+  });
+</script>
+</body>
+</html>
+  
